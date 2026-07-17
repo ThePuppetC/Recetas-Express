@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicia Sesión{% endblock %}
+
+{% block content %}
+<div class="container-xl py-5">
+    <div class="row">
+        <div class="col-lg-5 mx-auto">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="text-center mb-4">🔐 Inicia Sesión</h2>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.username.label }}</label>
+                            {{ form.username }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">{{ form.password.label }}</label>
+                            {{ form.password }}
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">Inicia Sesión</button>
+                        </div>
+
+                        <p class="text-center mt-3">
+                            ¿No tienes cuenta? <a href="{% url 'registro' %}">Regístrate aquí</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

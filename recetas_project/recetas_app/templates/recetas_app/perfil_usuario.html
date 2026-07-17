@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ perfil_usuario.get_full_name|default:perfil_usuario.username }}{% endblock %}
+
+{% block content %}
+<div class="container-xl py-5">
+    <!-- Perfil Header -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <div class="col-md-3 text-center">
+                    {% if perfil.foto_perfil %}
+                        <img src="{{ perfil.foto_perfil.url }}" alt="{{ perfil_usuario.username }}" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                        <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mb-3" style="width: 150px; height: 150px; font-size: 60px;">
+                            👤
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-9">
+                    <h2>{{ perfil_usuario.get_full_name|default:perfil_usuario.username }}</h2>
+                    <p class="text-muted">@{{ perfil_usuario.username }}</p>
+                    {% if perfil.bio %}
+                        <p>{{ perfil.bio }}</p>
+                    {% endif %}
+                    <div class="mt-3">
+                        {% if perfil.ciudad %}<p><strong>📍 Ciudad:</strong> {{ perfil.ciudad }}</p>{% endif %}
+                        {% if perfil.pais %}<p><strong>🌍 País:</strong> {{ perfil.pais }}</p>{% endif %}
+                        {% if perfil.preferencias_dieteticas %}<p><strong>🍽️ Preferencias:</strong> {{ perfil.preferencias_dieteticas }}</p>{% endif %}
+                    </div>
+                    {% if es_mi_perfil %}
+                        <a href="{% url 'editar_perfil' %}" class="btn btn-warning btn-sm mt-3">✏️ Editar Perfil</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Recetas Compartidas</h6>
+                    <h3 class="text-success">{{ perfil.total_recetas }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Calificaciones Recibidas</h6>
+                    <h3 class="text-warning">{{ perfil.total_puntuaciones_recibidas }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Se Unió</h6>
+                    <h3>{{ perfil.creado_en|date:"M Y" }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recetas del Usuario -->
+    <h3 class="mb-3">📋 Recetas de {{ perfil_usuario.username }}</h3>
+    {% if recetas %}
+        <div class="row g-4">
+            {% for receta in recetas %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="recipe-card">
+                        <div class="recipe-image" style="background-image: url('{{ receta.imagen.url }}')"></div>
+                        <div class="recipe-content">
+                            <div class="recipe-category">{{ receta.categoria.nombre }}</div>
+                            <h5 class="recipe-title">{{ receta.titulo }}</h5>
+                            <p class="text-muted small mb-2">{{ receta.descripcion|truncatewords:15 }}</p>
+                            <div class="recipe-meta">
+                                <span class="badge bg-info">⏱️ {{ receta.tiempo_total }}min</span>
+                                <span class="badge bg-warning">{{ receta.dificultad }}</span>
+                            </div>
+                            <div class="recipe-rating">
+                                <span class="stars">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= receta.promedio %}⭐{% else %}☆{% endif %}
+                                    {% endfor %}
+                                </span>
+                                <span class="text-muted small">({{ receta.total_puntuaciones }})</span>
+                            </div>
+                            <a href="{% url 'detalle_receta' receta.id %}" class="btn btn-sm btn-success w-100 mt-2">Ver →</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">Este usuario aún no ha compartido recetas.</p>
+    {% endif %}
+</div>
+{% endblock %}

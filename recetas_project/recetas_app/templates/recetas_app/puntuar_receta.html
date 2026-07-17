@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Calificar Receta{% endblock %}
+
+{% block content %}
+<div class="container-xl py-5">
+    <div class="row">
+        <div class="col-lg-6 mx-auto">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <div class="mb-4">
+                        <img src="{{ receta.imagen.url }}" alt="{{ receta.titulo }}" class="img-fluid rounded mb-3" style="max-height: 200px; object-fit: cover;">
+                        <h3>{{ receta.titulo }}</h3>
+                        <p class="text-muted">Por: {{ receta.autor.username }}</p>
+                    </div>
+
+                    <h5 class="mb-3">⭐ Califica esta receta</h5>
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <div class="btn-group-vertical w-100" role="group">
+                                {% for valor, label in form.puntuacion.field.choices %}
+                                    <label class="btn btn-outline-warning" style="text-align: left;">
+                                        <input type="radio" name="puntuacion" value="{{ valor }}" required> {{ label }}
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.comentario.label }}</label>
+                            {{ form.comentario }}
+                            <small class="text-muted">Comparte tu opinión sobre esta receta</small>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'detalle_receta' receta.id %}" class="btn btn-outline-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-success">✅ Enviar Calificación</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

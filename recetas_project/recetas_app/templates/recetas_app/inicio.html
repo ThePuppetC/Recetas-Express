@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Recetas Express - Inicio{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container-xl">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-3">🍳 Recetas Express</h1>
+                <p class="lead mb-4">Comparte tus mejores recetas, descubre nuevas ideas culinarias y conecta con otros amantes de la cocina.</p>
+                <div class="d-flex gap-2">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'crear_receta' %}" class="btn btn-success btn-lg">➕ Compartir Receta</a>
+                        <a href="{% url 'listar_recetas' %}" class="btn btn-outline-success btn-lg">🔍 Explorar</a>
+                    {% else %}
+                        <a href="{% url 'registro' %}" class="btn btn-success btn-lg">Empezar Ahora</a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-success btn-lg">Inicia Sesión</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-emoji">🥘🍕🍜🍰🥗</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Categorías Populares -->
+<section class="py-5">
+    <div class="container-xl">
+        <h2 class="text-center mb-4">📚 Categorías Populares</h2>
+        <div class="row g-3">
+            {% for categoria in categorias %}
+                <div class="col-md-3 col-sm-6">
+                    <a href="{% url 'categoria_detalle' categoria.nombre %}" class="text-decoration-none">
+                        <div class="category-card">
+                            <div class="category-icon">{{ categoria.icono }}</div>
+                            <h5 class="mt-3">{{ categoria.nombre }}</h5>
+                            <p class="text-muted small">{{ categoria.recetas.count }} recetas</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Recetas Destacadas -->
+<section class="py-5 bg-light">
+    <div class="container-xl">
+        <h2 class="text-center mb-4">⭐ Recetas Populares</h2>
+        <div class="row g-4">
+            {% for receta in recetas %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="recipe-card">
+                        <div class="recipe-image" style="background-image: url('{{ receta.imagen.url }}')"></div>
+                        <div class="recipe-content">
+                            <div class="recipe-category">{{ receta.categoria.nombre }}</div>
+                            <h5 class="recipe-title">{{ receta.titulo }}</h5>
+                            <p class="text-muted small mb-2">{{ receta.descripcion|truncatewords:15 }}</p>
+                            <div class="recipe-meta">
+                                <span class="badge bg-info">⏱️ {{ receta.tiempo_total }}min</span>
+                                <span class="badge bg-warning">{{ receta.dificultad }}</span>
+                            </div>
+                            <div class="recipe-rating">
+                                <span class="stars">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= receta.promedio %}⭐{% else %}☆{% endif %}
+                                    {% endfor %}
+                                </span>
+                                <span class="text-muted small">({{ receta.total_puntuaciones }})</span>
+                            </div>
+                            <div class="recipe-footer">
+                                <small class="text-muted">Por: {{ receta.autor.username }}</small>
+                                <a href="{% url 'detalle_receta' receta.id %}" class="btn btn-sm btn-success">Ver →</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center">
+                    <p class="text-muted">No hay recetas disponibles</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

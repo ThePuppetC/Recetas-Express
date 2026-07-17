@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Crear Nueva Receta{% endblock %}
+
+{% block content %}
+<div class="container-xl py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h2 class="mb-4">➕ Compartir Nueva Receta</h2>
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">{{ form.titulo.label }}</label>
+                                {{ form.titulo }}
+                                {% if form.titulo.errors %}
+                                    <small class="text-danger d-block mt-1">{{ form.titulo.errors }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ form.categoria.label }}</label>
+                                {{ form.categoria }}
+                                {% if form.categoria.errors %}
+                                    <small class="text-danger d-block mt-1">{{ form.categoria.errors }}</small>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ form.dificultad.label }}</label>
+                                {{ form.dificultad }}
+                                {% if form.dificultad.errors %}
+                                    <small class="text-danger d-block mt-1">{{ form.dificultad.errors }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.descripcion.label }}</label>
+                            {{ form.descripcion }}
+                            {% if form.descripcion.errors %}
+                                <small class="text-danger d-block mt-1">{{ form.descripcion.errors }}</small>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">{{ form.tiempo_preparacion.label }}</label>
+                                {{ form.tiempo_preparacion }}
+                                {% if form.tiempo_preparacion.errors %}
+                                    <small class="text-danger d-block mt-1">{{ form.tiempo_preparacion.errors }}</small>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">{{ form.tiempo_coccion.label }}</label>
+                                {{ form.tiempo_coccion }}
+                                {% if form.tiempo_coccion.errors %}
+                                    <small class="text-danger d-block mt-1">{{ form.tiempo_coccion.errors }}</small>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">{{ form.porciones.label }}</label>
+                                {{ form.porciones }}
+                                {% if form.porciones.errors %}
+                                    <small class="text-danger d-block mt-1">{{ form.porciones.errors }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.ingredientes.label }}</label>
+                            {{ form.ingredientes }}
+                            {% if form.ingredientes.errors %}
+                                <small class="text-danger d-block mt-1">{{ form.ingredientes.errors }}</small>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.instrucciones.label }}</label>
+                            {{ form.instrucciones }}
+                            {% if form.instrucciones.errors %}
+                                <small class="text-danger d-block mt-1">{{ form.instrucciones.errors }}</small>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.imagen.label }}</label>
+                            {{ form.imagen }}
+                            {% if form.imagen.errors %}
+                                <small class="text-danger d-block mt-1">{{ form.imagen.errors }}</small>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'home' %}" class="btn btn-outline-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-success">✅ Compartir Receta</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
