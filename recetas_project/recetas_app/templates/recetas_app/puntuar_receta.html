@@ -8,35 +8,29 @@
         <div class="col-lg-6 mx-auto">
             <div class="card shadow-sm">
                 <div class="card-body p-4">
-                    <div class="mb-4">
-                        <img src="{{ receta.imagen.url }}" alt="{{ receta.titulo }}" class="img-fluid rounded mb-3" style="max-height: 200px; object-fit: cover;">
-                        <h3>{{ receta.titulo }}</h3>
-                        <p class="text-muted">Por: {{ receta.autor.username }}</p>
-                    </div>
+                    <img src="{{ receta.imagen.url }}" alt="{{ receta.titulo }}" class="img-fluid rounded mb-3" style="max-height: 200px; object-fit: cover;">
+                    <h3>{{ receta.titulo }}</h3>
+                    <p class="text-muted">Por: {{ receta.autor.username }}</p>
 
-                    <h5 class="mb-3">⭐ Califica esta receta</h5>
-
+                    <h5 class="mt-4 mb-3">⭐ Califica esta receta</h5>
                     <form method="POST">
                         {% csrf_token %}
-                        <div class="mb-3">
-                            <label class="form-label">{{ form.puntuacion.label }}</label>
-                            {% if form.puntuacion.errors %}
-                                <div class="alert alert-danger py-2">{{ form.puntuacion.errors }}</div>
-                            {% endif %}
-                            <div class="d-flex gap-3">
-                                {% for radio in form.puntuacion %}
-                                    <label class="form-check" style="cursor: pointer; font-size: 2rem;">
-                                        {{ radio.tag }}
-                                        {% for i in "12345" %}{% if forloop.counter <= radio.choice_label %}⭐{% else %}☆{% endif %}{% endfor %}
-                                    </label>
+                        <div class="mb-4">
+                            <div class="rating-input d-flex gap-2" style="font-size: 2.5rem;">
+                                {% for i in "12345" %}
+                                    <input type="radio" name="puntuacion" value="{{ i }}" id="star{{ i }}" style="display: none;">
+                                    <label for="star{{ i }}" class="rating-star" style="cursor: pointer;">★</label>
                                 {% endfor %}
                             </div>
+                            {% if form.puntuacion.errors %}
+                                <div class="alert alert-danger mt-2">{{ form.puntuacion.errors }}</div>
+                            {% endif %}
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">{{ form.comentario.label }}</label>
+                            <label class="form-label">Tu comentario</label>
                             {{ form.comentario }}
-                            <small class="text-muted">Comparte tu opinión sobre esta receta</small>
+                            <small class="text-muted d-block mt-1">Comparte tu opinión sobre esta receta</small>
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -49,4 +43,28 @@
         </div>
     </div>
 </div>
+
+<style>
+.rating-star { color: #ccc; transition: color 0.2s; }
+.rating-star:hover { color: #ffc107; }
+input[type="radio"]:checked ~ .rating-star,
+.rating-star:hover ~ .rating-star { color: #ffc107; }
+input[type="radio"]:checked ~ .rating-star:not(:hover) { color: #ffc107; }
+</style>
+
+<script>
+const stars = document.querySelectorAll('.rating-star');
+stars.forEach((star, i) => {
+    star.addEventListener('mouseenter', () => {
+        stars.forEach((s, j) => s.style.color = j <= i ? '#ffc107' : '#ccc');
+    });
+});
+document.querySelector('.rating-input').addEventListener('mouseleave', () => {
+    const checked = document.querySelector('input[type="radio"]:checked');
+    stars.forEach((s, i) => s.style.color = checked && i < checked.value ? '#ffc107' : '#ccc');
+});
+stars.forEach(star => star.addEventListener('click', () => {
+    stars.forEach((s, i) => s.style.color = i < star.parentElement.querySelector('input').value ? '#ffc107' : '#ccc');
+}));
+</script>
 {% endblock %}

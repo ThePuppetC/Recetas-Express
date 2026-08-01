@@ -6,27 +6,22 @@
 <div class="container-xl py-5">
     <!-- Perfil Header -->
     <div class="card shadow-sm mb-4">
-        <div class="card-body p-4">
+        <div class="card-body p-5">
             <div class="row align-items-center">
-                <div class="col-md-3 text-center">
+                <div class="col-md-3 text-center mb-4 mb-md-0">
                     {% if perfil.foto_perfil %}
                         <img src="{{ perfil.foto_perfil.url }}" alt="{{ perfil_usuario.username }}" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
                     {% else %}
-                        <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mb-3" style="width: 150px; height: 150px; font-size: 60px;">
-                            👤
-                        </div>
+                        <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mb-3" style="width: 150px; height: 150px; font-size: 4rem;">👤</div>
                     {% endif %}
                 </div>
                 <div class="col-md-9">
-                    <h2>{{ perfil_usuario.get_full_name|default:perfil_usuario.username }}</h2>
-                    <p class="text-muted">@{{ perfil_usuario.username }}</p>
-                    {% if perfil.bio %}
-                        <p>{{ perfil.bio }}</p>
-                    {% endif %}
-                    <div class="mt-3">
-                        {% if perfil.ciudad %}<p><strong>📍 Ciudad:</strong> {{ perfil.ciudad }}</p>{% endif %}
-                        {% if perfil.pais %}<p><strong>🌍 País:</strong> {{ perfil.pais }}</p>{% endif %}
-                        {% if perfil.preferencias_dieteticas %}<p><strong>🍽️ Preferencias:</strong> {{ perfil.preferencias_dieteticas }}</p>{% endif %}
+                    <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 0.25rem;">@{{ perfil_usuario.username }}</h1>
+                    <p style="font-size: 1rem; color: #666; margin-bottom: 1rem;">{{ perfil_usuario.get_full_name }}</p>
+                    {% if perfil.bio %}<p class="text-muted mb-2">{{ perfil.bio }}</p>{% endif %}
+                    <div style="font-size: 0.95rem; color: #555;">
+                        {% if perfil.ciudad %}<span>📍 {{ perfil.ciudad }}</span>{% endif %}
+                        {% if perfil.pais %}<span class="ms-3">🌍 {{ perfil.pais }}</span>{% endif %}
                     </div>
                     {% if es_mi_perfil %}
                         <a href="{% url 'editar_perfil' %}" class="btn btn-warning btn-sm mt-3">✏️ Editar Perfil</a>
