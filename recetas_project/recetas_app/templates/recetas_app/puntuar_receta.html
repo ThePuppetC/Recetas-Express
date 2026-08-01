@@ -23,8 +23,13 @@
                             {% if form.puntuacion.errors %}
                                 <div class="alert alert-danger py-2">{{ form.puntuacion.errors }}</div>
                             {% endif %}
-                            <div class="d-flex flex-column gap-2">
-                                {{ form.puntuacion }}
+                            <div class="d-flex gap-3">
+                                {% for radio in form.puntuacion %}
+                                    <label class="form-check" style="cursor: pointer; font-size: 2rem;">
+                                        {{ radio.tag }}
+                                        {% for i in "12345" %}{% if forloop.counter <= radio.choice_label %}⭐{% else %}☆{% endif %}{% endfor %}
+                                    </label>
+                                {% endfor %}
                             </div>
                         </div>
 
