@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Categorías{% endblock %}
+
+{% block content %}
+<div class="container-xl py-5">
+    <h2 class="mb-4">📚 Categorías de Recetas</h2>
+
+    <div class="row g-3 mb-5">
+        {% for categoria in categorias %}
+            <div class="col-md-3 col-sm-6">
+                <a href="{% url 'categoria_detalle' categoria.nombre %}#categoria-recetas" class="text-decoration-none">
+                    <div class="category-card">
+                        <div class="category-icon">{{ categoria.icono }}</div>
+                        <h5 class="mt-3">{{ categoria.nombre }}</h5>
+                        <p class="text-muted small">{{ categoria.recetas.count }} recetas</p>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Recetas de la categoría seleccionada -->
+    {% if categoria_seleccionada %}
+        <hr class="my-5">
+        <section id="categoria-recetas" class="scroll-target">
+            <h3 class="mb-4">🍽️ Recetas en {{ categoria_seleccionada.nombre }}</h3>
+        {% if recetas %}
+            <div class="row g-4">
+                {% for receta in recetas %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="recipe-card">
+                            <div class="recipe-image" style="background-image: url('{{ receta.imagen.url }}')"></div>
+                            <div class="recipe-content">
+                                <div class="recipe-category">{{ receta.categoria.nombre }}</div>
+                                <h5 class="recipe-title">{{ receta.titulo }}</h5>
+                                <p class="text-muted small mb-2">{{ receta.descripcion|truncatewords:15 }}</p>
+                                <div class="recipe-meta">
+                                    <span class="badge bg-info">⏱️ {{ receta.tiempo_total }}min</span>
+                                    <span class="badge bg-warning">{{ receta.dificultad }}</span>
+                                </div>
+                                <div class="recipe-rating">
+                                    <span class="stars">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= receta.promedio %}⭐{% else %}☆{% endif %}
+                                        {% endfor %}
+                                    </span>
+                                    <span class="text-muted small">({{ receta.total_puntuaciones }})</span>
+                                </div>
+                                <div class="recipe-footer">
+                                    <small class="text-muted">Por: {{ receta.autor.username }}</small>
+                                    <a href="{% url 'detalle_receta' receta.id %}" class="btn btn-sm btn-success">Ver →</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted">No hay recetas en esta categoría.</p>
+        {% endif %}
+        </section>
+    {% endif %}
+</div>
+{% endblock %}
