@@ -13,29 +13,25 @@ from .forms import RegistroForm, LoginForm, RecetaForm, PuntuacionForm, PerfilUs
 
 def inicio(request):
     """Página de inicio con recetas populares"""
-    recetas = Receta.objects.all().annotate(
+    recetas = Receta.objects.select_related('categoria', 'autor').annotate(
         promedio=Avg('puntuaciones__puntuacion'),
         total_puntuaciones=Count('puntuaciones')
     ).order_by('-creada_en')[:12]
     
     categorias = Categoria.objects.all()
     
-    context = {
-        'recetas': recetas,
-        'categorias': categorias,
-    }
+    context = {'recetas': recetas, 'categorias': categorias}
     return render(request, 'recetas_app/inicio.html', context)
 
 
 def listar_recetas(request):
     """Lista todas las recetas con filtros"""
     form = BusquedaForm(request.GET)
-    recetas = Receta.objects.all().annotate(
+    recetas = Receta.objects.select_related('categoria', 'autor').annotate(
         promedio=Avg('puntuaciones__puntuacion'),
         total_puntuaciones=Count('puntuaciones')
     )
     
-    # Búsqueda
     if request.GET.get('busqueda'):
         busqueda = request.GET.get('busqueda')
         recetas = recetas.filter(
@@ -44,15 +40,12 @@ def listar_recetas(request):
             Q(ingredientes__icontains=busqueda)
         )
     
-    # Filtro por categoría
     if request.GET.get('categoria'):
         recetas = recetas.filter(categoria_id=request.GET.get('categoria'))
     
-    # Filtro por dificultad
     if request.GET.get('dificultad'):
         recetas = recetas.filter(dificultad=request.GET.get('dificultad'))
     
-    # Filtro por tiempo
     if request.GET.get('tiempo_max'):
         try:
             tiempo = int(request.GET.get('tiempo_max'))
@@ -61,23 +54,19 @@ def listar_recetas(request):
             pass
     
     recetas = recetas.order_by('-creada_en')
-    
-    # Paginación
     paginator = Paginator(recetas, 12)
-    page = request.GET.get('page')
-    recetas = paginator.get_page(page)
+    recetas = paginator.get_page(request.GET.get('page'))
     
-    context = {
-        'recetas': recetas,
-        'form': form,
-    }
-    return render(request, 'recetas_app/listar_recetas.html', context)
+    return render(request, 'recetas_app/listar_recetas.html', {'recetas': recetas, 'form': form})
 
 
 def detalle_receta(request, pk):
     """Detalle completo de una receta"""
-    receta = get_object_or_404(Receta, pk=pk)
-    puntuaciones = receta.puntuaciones.all().order_by('-creada_en')
+    receta = get_object_or_404(
+        Receta.objects.select_related('categoria', 'autor').prefetch_related('puntuaciones'),
+        pk=pk
+    )
+    puntuaciones = receta.puntuaciones.select_related('usuario').order_by('-creada_en')
     promedio = receta.promedio_puntuacion()
     
     puedo_puntuar = False
