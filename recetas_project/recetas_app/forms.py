@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import Receta, Puntuacion, PerfilUsuario, Categoria
+from .validators import validate_image_upload
 
 
 class RegistroForm(UserCreationForm):
@@ -73,6 +74,12 @@ class RecetaForm(forms.ModelForm):
             'categoria': forms.Select(attrs={'class': 'form-control'}),
             'imagen': forms.FileInput(attrs={'class': 'form-control'}),
         }
+    
+    def clean_imagen(self):
+        img = self.cleaned_data.get('imagen')
+        if img:
+            validate_image_upload(img)
+        return img
 
 
 class PuntuacionForm(forms.ModelForm):
