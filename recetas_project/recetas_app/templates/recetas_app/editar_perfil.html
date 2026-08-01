@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Mi Perfil{% endblock %}
+
+{% block content %}
+<div class="container-xl py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h2 class="mb-4">⚙️ Editar Mi Perfil</h2>
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.foto_perfil.label }}</label>
+                            {{ form.foto_perfil }}
+                            {% if form.foto_perfil.errors %}
+                                <small class="text-danger d-block mt-1">{{ form.foto_perfil.errors }}</small>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.bio.label }}</label>
+                            {{ form.bio }}
+                            {% if form.bio.errors %}
+                                <small class="text-danger d-block mt-1">{{ form.bio.errors }}</small>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ form.ciudad.label }}</label>
+                                {{ form.ciudad }}
+                                {% if form.ciudad.errors %}
+                                    <small class="text-danger d-block mt-1">{{ form.ciudad.errors }}</small>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ form.pais.label }}</label>
+                                {{ form.pais }}
+                                {% if form.pais.errors %}
+                                    <small class="text-danger d-block mt-1">{{ form.pais.errors }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.preferencias_dieteticas.label }}</label>
+                            {{ form.preferencias_dieteticas }}
+                            {% if form.preferencias_dieteticas.errors %}
+                                <small class="text-danger d-block mt-1">{{ form.preferencias_dieteticas.errors }}</small>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'perfil_usuario' user.username %}" class="btn btn-outline-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-success">✅ Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

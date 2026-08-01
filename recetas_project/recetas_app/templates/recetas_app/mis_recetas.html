@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Mis Recetas{% endblock %}
+
+{% block content %}
+<div class="container-xl py-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2>📋 Mis Recetas</h2>
+            <p class="text-muted">Aquí están todas las recetas que has compartido</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{% url 'crear_receta' %}" class="btn btn-success">➕ Nueva Receta</a>
+        </div>
+    </div>
+
+    {% if recetas %}
+        <div class="row g-4">
+            {% for receta in recetas %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="recipe-card">
+                        <div class="recipe-image" style="background-image: url('{{ receta.imagen.url }}')"></div>
+                        <div class="recipe-content">
+                            <div class="recipe-category">{{ receta.categoria.nombre }}</div>
+                            <h5 class="recipe-title">{{ receta.titulo }}</h5>
+                            <p class="text-muted small mb-2">{{ receta.descripcion|truncatewords:15 }}</p>
+                            <div class="recipe-meta">
+                                <span class="badge bg-info">⏱️ {{ receta.tiempo_total }}min</span>
+                                <span class="badge bg-warning">{{ receta.dificultad }}</span>
+                            </div>
+                            <div class="recipe-rating">
+                                <span class="stars">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= receta.promedio %}⭐{% else %}☆{% endif %}
+                                    {% endfor %}
+                                </span>
+                                <span class="text-muted small">({{ receta.total_puntuaciones }})</span>
+                            </div>
+                            <div class="btn-group w-100">
+                                <a href="{% url 'detalle_receta' receta.id %}" class="btn btn-sm btn-info">Ver</a>
+                                <a href="{% url 'editar_receta' receta.id %}" class="btn btn-sm btn-warning">✏️ Editar</a>
+                                <a href="{% url 'eliminar_receta' receta.id %}" class="btn btn-sm btn-danger">🗑️</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Paginación -->
+        {% if recetas.has_other_pages %}
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if recetas.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">Primera</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ recetas.previous_page_number }}">Anterior</a>
+                        </li>
+                    {% endif %}
+
+                    {% for num in recetas.paginator.page_range %}
+                        {% if recetas.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if recetas.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ recetas.next_page_number }}">Siguiente</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ recetas.paginator.num_pages }}">Última</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-info text-center">
+            <p>Aún no has compartido ninguna receta. <a href="{% url 'crear_receta' %}">¡Crea tu primera receta!</a></p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

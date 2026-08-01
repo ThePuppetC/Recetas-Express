@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Receta{% endblock %}
+
+{% block content %}
+<div class="container-xl py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h2 class="mb-4">✏️ Editar Receta</h2>
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">{{ form.titulo.label }}</label>
+                                {{ form.titulo }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ form.categoria.label }}</label>
+                                {{ form.categoria }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ form.dificultad.label }}</label>
+                                {{ form.dificultad }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.descripcion.label }}</label>
+                            {{ form.descripcion }}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">{{ form.tiempo_preparacion.label }}</label>
+                                {{ form.tiempo_preparacion }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">{{ form.tiempo_coccion.label }}</label>
+                                {{ form.tiempo_coccion }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">{{ form.porciones.label }}</label>
+                                {{ form.porciones }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.ingredientes.label }}</label>
+                            {{ form.ingredientes }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.instrucciones.label }}</label>
+                            {{ form.instrucciones }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.imagen.label }}</label>
+                            {{ form.imagen }}
+                            {% if receta.imagen %}
+                                <p class="text-muted small mt-2">Imagen actual:</p>
+                                <img src="{{ receta.imagen.url }}" alt="{{ receta.titulo }}" style="max-width: 150px; border-radius: 5px;">
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'detalle_receta' receta.id %}" class="btn btn-outline-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-warning">✅ Actualizar Receta</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

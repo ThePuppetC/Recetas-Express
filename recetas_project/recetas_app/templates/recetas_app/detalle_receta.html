@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ receta.titulo }}{% endblock %}
+
+{% block content %}
+<div class="container-xl py-5">
+    <div class="row">
+        <!-- Imagen y Info Principal -->
+        <div class="col-lg-6 mb-4">
+            <img src="{{ receta.imagen.url }}" alt="{{ receta.titulo }}" class="img-fluid rounded shadow mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3>{{ receta.titulo }}</h3>
+                    <p class="text-muted">{{ receta.descripcion }}</p>
+                    <div class="mb-3">
+                        <span class="badge bg-success">{{ receta.categoria.nombre }}</span>
+                        <span class="badge bg-warning">{{ receta.dificultad }}</span>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <h6>⏱️ Tiempo Total</h6>
+                            <p class="h5">{{ receta.tiempo_total }} min</p>
+                        </div>
+                        <div class="col-6">
+                            <h6>🍽️ Porciones</h6>
+                            <p class="h5">{{ receta.porciones }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido Principal -->
+        <div class="col-lg-6">
+            <!-- Autor -->
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Autor</h5>
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <h6><a href="{% url 'perfil_usuario' receta.autor.username %}" class="text-decoration-none">👤 {{ receta.autor.get_full_name|default:receta.autor.username }}</a></h6>
+                            <p class="text-muted small">{{ receta.autor.recetas.count }} recetas compartidas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calificación -->
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">⭐ Calificación</h5>
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="h4 me-3">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= promedio %}⭐{% else %}☆{% endif %}
+                            {% endfor %}
+                        </span>
+                        <div>
+                            <p class="mb-0"><strong>{{ promedio }}/5</strong></p>
+                            <p class="text-muted small">{{ total_puntuaciones }} calificaciones</p>
+                        </div>
+                    </div>
+                    {% if user.is_authenticated %}
+                        {% if puedo_puntuar %}
+                            <a href="{% url 'puntuar_receta' receta.id %}" class="btn btn-outline-warning btn-sm w-100">
+                                ⭐ Calificar esta receta
+                            </a>
+                        {% elif mi_puntuacion %}
+                            <div class="alert alert-info mb-0">
+                                Tu calificación: <strong>{{ mi_puntuacion.puntuacion }} ⭐</strong>
+                                <a href="{% url 'puntuar_receta' receta.id %}" class="ms-2 small">Editar</a>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <p class="text-muted small mb-0"><a href="{% url 'login' %}">Inicia sesión</a> para calificar</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Acciones del autor -->
+            {% if user == receta.autor %}
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-body">
+                        <a href="{% url 'editar_receta' receta.id %}" class="btn btn-warning btn-sm w-100 mb-2">✏️ Editar</a>
+                        <a href="{% url 'eliminar_receta' receta.id %}" class="btn btn-danger btn-sm w-100">🗑️ Eliminar</a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Ingredientes e Instrucciones -->
+    <div class="row mt-4">
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">📝 Ingredientes</h5>
+                    <ul class="list-group list-group-flush">
+                        {% for ingrediente in receta.ingredientes_list %}
+                            <li class="list-group-item">✓ {{ ingrediente }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">👨‍🍳 Instrucciones</h5>
+                    <ol class="list-group list-group-numbered">
+                        {% for instruccion in receta.instrucciones_list %}
+                            <li class="list-group-item">{{ instruccion }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comentarios y Calificaciones -->
+    <div class="mt-5">
+        <h4>💬 Comentarios ({{ total_puntuaciones }})</h4>
+        {% for puntuacion in puntuaciones %}
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="mb-1">
+                                <a href="{% url 'perfil_usuario' puntuacion.usuario.username %}" class="text-decoration-none">
+                                    {{ puntuacion.usuario.get_full_name|default:puntuacion.usuario.username }}
+                                </a>
+                            </h6>
+                            <p class="text-warning mb-2">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= puntuacion.puntuacion %}⭐{% else %}☆{% endif %}
+                                {% endfor %}
+                            </p>
+                        </div>
+                        <small class="text-muted">{{ puntuacion.creada_en|date:"d M Y" }}</small>
+                    </div>
+                    {% if puntuacion.comentario %}
+                        <p class="card-text">{{ puntuacion.comentario }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-muted">Aún no hay comentarios. ¡Sé el primero!</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

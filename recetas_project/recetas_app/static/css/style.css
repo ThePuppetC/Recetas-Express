@@ -124,6 +124,21 @@ main.main-content {
     scroll-margin-top: 120px;
 }
 
+.accessibility-toolbar {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.accessibility-toolbar .btn {
+    border-radius: 999px;
+    font-size: 0.8rem;
+}
+
+.scroll-target {
+    scroll-margin-top: 120px;
+}
+
 @media (max-width: 768px) {
     .search-bar {
         width: 100%;
