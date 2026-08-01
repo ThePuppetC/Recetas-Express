@@ -40,6 +40,10 @@
                                 <li><a class="dropdown-item" href="{% url 'perfil_usuario' user.username %}">Mi Perfil</a></li>
                                 <li><a class="dropdown-item" href="{% url 'mis_recetas' %}">Mis Recetas</a></li>
                                 <li><a class="dropdown-item" href="{% url 'crear_receta' %}">➕ Nueva Receta</a></li>
+                                {% if user.is_superuser %}
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="/admin/" style="color: #d9534f; font-weight: 600;">⚙️ Panel de Administración</a></li>
+                                {% endif %}
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'logout' %}">Cerrar Sesión</a></li>
                             </ul>

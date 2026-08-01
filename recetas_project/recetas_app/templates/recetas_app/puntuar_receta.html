@@ -19,15 +19,12 @@
                     <form method="POST">
                         {% csrf_token %}
                         <div class="mb-3">
+                            <label class="form-label">{{ form.puntuacion.label }}</label>
                             {% if form.puntuacion.errors %}
                                 <div class="alert alert-danger py-2">{{ form.puntuacion.errors }}</div>
                             {% endif %}
-                            <div class="btn-group-vertical w-100" role="group">
-                                {% for valor, label in form.puntuacion.field.choices %}
-                                    <label class="btn btn-outline-warning" style="text-align: left;">
-                                        <input type="radio" name="puntuacion" value="{{ valor }}" required> {{ label }}
-                                    </label>
-                                {% endfor %}
+                            <div class="d-flex flex-column gap-2">
+                                {{ form.puntuacion }}
                             </div>
                         </div>
 

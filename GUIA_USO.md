@@ -174,6 +174,28 @@ python manage.py runserver 8001
 4. **Compartir tu primera receta** en `/recetas/crear/`
 5. **Explorar funcionalidades** - crear, buscar, puntuar
 
+## 🤖 Commit automático de cambios
+
+Si quieres dejar guardados automáticamente los cambios nuevos del proyecto, puedes usar el script incluido:
+
+```bash
+chmod +x auto_commit.sh
+./auto_commit.sh
+```
+
+También puedes pasar un mensaje personalizado:
+
+```bash
+./auto_commit.sh "Actualización de recetas y mejoras visuales"
+```
+
+Este script:
+- agrega todos los cambios nuevos al staging area,
+- crea un commit con el mensaje indicado,
+- lo sube al remoto con `git push`.
+
+> Recomendación: usa un mensaje claro y específico para cada lote de cambios.
+
 ## 📝 Notas
 
 - La base de datos está en `recetas_project/db.sqlite3`
