@@ -21,53 +21,6 @@ body {
     color: #111111;
 }
 
-body.high-contrast {
-    background-color: #000000;
-    color: #ffffff;
-}
-
-body.high-contrast .navbar,
-body.high-contrast .card,
-body.high-contrast .recipe-card,
-body.high-contrast .category-card,
-body.high-contrast .dropdown-menu,
-body.high-contrast .alert,
-body.high-contrast footer {
-    background-color: #111111 !important;
-    color: #ffffff !important;
-    border-color: #ffffff;
-}
-
-body.high-contrast a,
-body.high-contrast .text-muted,
-body.high-contrast .nav-link,
-body.high-contrast .dropdown-item,
-body.high-contrast .card-title,
-body.high-contrast .recipe-title,
-body.high-contrast h1,
-body.high-contrast h2,
-body.high-contrast h3,
-body.high-contrast h4,
-body.high-contrast h5,
-body.high-contrast h6,
-body.high-contrast p,
-body.high-contrast li,
-body.high-contrast label,
-body.high-contrast small {
-    color: #ffffff !important;
-}
-
-body.high-contrast .btn-outline-secondary,
-body.high-contrast .btn-outline-success {
-    color: #ffffff;
-    border-color: #ffffff;
-}
-
-body.high-contrast .btn-success {
-    background-color: #ffffff;
-    color: #000000;
-}
-
 html, body {
     height: 100%;
 }
@@ -109,40 +62,61 @@ main.main-content {
     margin-left: -1px;
 }
 
-.accessibility-toolbar {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.accessibility-toolbar .btn {
-    border-radius: 999px;
-    font-size: 0.8rem;
-}
-
 .scroll-target {
     scroll-margin-top: 120px;
 }
 
-.accessibility-toolbar {
+/* Botón flotante de voz */
+.voice-button-floating {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    border: none;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+    transition: all 0.3s ease;
+    z-index: 999;
     display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 }
 
-.accessibility-toolbar .btn {
-    border-radius: 999px;
-    font-size: 0.8rem;
+.voice-button-floating:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(46, 204, 113, 0.4);
 }
 
-.scroll-target {
-    scroll-margin-top: 120px;
+.voice-button-floating:active {
+    transform: scale(0.95);
+}
+
+.voice-button-floating.playing {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3); }
+    50% { box-shadow: 0 4px 20px rgba(46, 204, 113, 0.6); }
 }
 
 @media (max-width: 768px) {
     .search-bar {
         width: 100%;
         margin-bottom: 0.5rem;
+    }
+    
+    .voice-button-floating {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
     }
 }
 
