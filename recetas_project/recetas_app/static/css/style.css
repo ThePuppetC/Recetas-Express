@@ -527,3 +527,45 @@ input[type="file"] {
 .btn-success:hover {
     background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
 }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 1200px) {
+    .container-xl { padding: 0 1rem; }
+    .recipe-card { margin-bottom: 1.5rem; }
+}
+
+@media (max-width: 992px) {
+    .navbar-brand { font-size: 1.2rem; }
+    .recipe-grid { grid-template-columns: repeat(2, 1fr); }
+    .card { margin-bottom: 1.5rem; }
+}
+
+@media (max-width: 768px) {
+    body { font-size: 15px; }
+    .navbar { padding: 0.5rem 0; }
+    .search-bar { width: 100%; margin-bottom: 0.5rem; }
+    .search-bar input { font-size: 14px; }
+    .recipe-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .category-card { padding: 1.5rem; }
+    .rating-input { font-size: 2rem !important; gap: 0.5rem !important; }
+    .card { margin-bottom: 1rem; }
+    h1 { font-size: 1.75rem; }
+    h2 { font-size: 1.5rem; }
+    .badge { padding: 0.35rem 0.6rem; font-size: 0.85rem; }
+}
+
+@media (max-width: 576px) {
+    .container-xl { padding: 0 0.75rem; }
+    .navbar-brand { font-size: 1rem; }
+    .chef-icon { font-size: 1.5rem; }
+    .recipe-card { border-radius: 6px; }
+    .card-body { padding: 1rem; }
+    .hero-section { padding: 2rem 1rem; }
+    .btn { padding: 0.375rem 0.75rem; font-size: 0.875rem; }
+    .btn-sm { padding: 0.25rem 0.5rem; font-size: 0.75rem; }
+    .rating-input { font-size: 1.75rem !important; }
+    h1 { font-size: 1.4rem; }
+    h2 { font-size: 1.2rem; }
+    .row { margin: 0; }
+    .col-md-3, .col-md-6, .col-md-9, .col-lg-6 { padding: 0.5rem; }
+}
